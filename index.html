@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Assinatura</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
+    <title>Ficha de Desempenho</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Minha Assinatura Eletrônica</h1>
-    <img src="assinatura.png" alt="Assinatura">
-    <p>Essa é a minha assinatura digital!</p>
+    <h1>Ficha de Desempenho Semanal</h1>
+    <div id="tabela-container"></div>
+
+    <!-- Botões de Assinatura -->
+    <div class="assinatura-container">
+        <button onclick="abrirAssinatura('supervisao')">Assinar Supervisão</button>
+        <button onclick="abrirAssinatura('colaborador')">Assinar Colaborador</button>
+    </div>
+
+    <!-- Espaço para as assinaturas -->
+    <div class="assinaturas">
+        <p>Assinatura da Supervisão: <span id="assinatura-supervisao">________________________</span></p>
+        <p>Assinatura do Colaborador(a): <span id="assinatura-colaborador">________________________</span></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
