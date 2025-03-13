@@ -70,4 +70,4 @@ function abrirAssinatura(tipo) {
 }
 
 // Carregar a planilha ao iniciar
-carregarPlanilha('https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?pli=1&gid=1159202773#gid=1159202773', 'FORMATAÇÃO');
+carregarPlanilha('https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?pli=1&gid=1159202773', 'FORMATAÇÃO');
