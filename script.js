@@ -15,8 +15,8 @@ async function consultarColaborador() {
         return;
     }
 
-    const url = 'URL_DA_PLANILHA'; // Substitua pela URL da planilha
-    const nomePlanilha = 'NOME_DA_PLANILHA'; // Substitua pelo nome da planilha
+    const url = 'https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?gid=0#gid=0'; // Substitua pela URL da planilha
+    const nomePlanilha = 'FORMATAÇÃO'; // Substitua pelo nome da planilha
     const dados = await carregarPlanilha(url, nomePlanilha);
 
     // Mapeamento das colunas (ajuste conforme sua planilha)
