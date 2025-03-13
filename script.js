@@ -4,9 +4,22 @@ async function carregarPlanilha(url, nomePlanilha) {
     const data = await response.arrayBuffer();
     const workbook = XLSX.read(data, { type: 'array' });
     const planilha = workbook.Sheets[nomePlanilha];
-    const json = XLSX.utils.sheet_to_json(planilha, { header: 1 });
+    return XLSX.utils.sheet_to_json(planilha, { header: 1 });
+}
 
-    // Exemplo de colunas (ajuste conforme sua planilha)
+// Função para consultar o colaborador
+async function consultarColaborador() {
+    const codigo = document.getElementById('codigo-colaborador').value;
+    if (!codigo) {
+        alert("Por favor, insira o código do colaborador.");
+        return;
+    }
+
+    const url = 'URL_DA_PLANILHA'; // Substitua pela URL da planilha
+    const nomePlanilha = 'NOME_DA_PLANILHA'; // Substitua pelo nome da planilha
+    const dados = await carregarPlanilha(url, nomePlanilha);
+
+    // Mapeamento das colunas (ajuste conforme sua planilha)
     const colunas = {
         codigo: 0,
         tma: 1,
@@ -20,54 +33,68 @@ async function carregarPlanilha(url, nomePlanilha) {
         status: 9
     };
 
-    const tabela = document.createElement('table');
-    tabela.innerHTML = `
-        <tr>
-            <th>Código</th>
-            <th>TMA</th>
-            <th>TMIA</th>
-            <th>TME</th>
-            <th>Taxa de Trans.</th>
-            <th>AB/PROD</th>
-            <th>Pendências</th>
-            <th>O.S/LOG</th>
-            <th>Período</th>
-            <th>Status</th>
-        </tr>
-    `;
+    // Filtra os dados do colaborador
+    const dadosColaborador = dados.filter(linha => linha[colunas.codigo] === codigo);
 
-    json.forEach((linha, index) => {
-        if (index === 0) return; // Ignora o cabeçalho
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${linha[colunas.codigo]}</td>
-            <td>${linha[colunas.tma]}</td>
-            <td>${linha[colunas.tmia]}</td>
-            <td>${linha[colunas.tme]}</td>
-            <td>${linha[colunas.taxaTrans]}</td>
-            <td>${linha[colunas.abProd]}</td>
-            <td>${linha[colunas.pendencias]}</td>
-            <td>${linha[colunas.osLog]}</td>
-            <td>${linha[colunas.periodo]}</td>
-            <td>${linha[colunas.status]}</td>
-        `;
-        tabela.appendChild(tr);
-    });
-
-    document.getElementById('tabela-container').appendChild(tabela);
-}
-
-// Função para abrir a página de assinatura
-function abrirAssinatura(tipo) {
-    const janela = window.open('assinatura.html', 'Assinatura', 'width=600,height=400');
-    janela.onbeforeunload = () => {
-        const assinatura = localStorage.getItem('assinatura');
-        if (assinatura) {
-            document.getElementById(`assinatura-${tipo}`).innerHTML = `<img src="${assinatura}" alt="Assinatura" style="width: 150px;">`;
-            localStorage.removeItem('assinatura');
-        }
+    // Separa os dados por semana
+    const semanas = {
+        "Primeira Semana": dadosColaborador.filter(linha => linha[colunas.status] === "Primeira Semana"),
+        "Segunda Semana": dadosColaborador.filter(linha => linha[colunas.status] === "Segunda Semana"),
+        "Terceira Semana": dadosColaborador.filter(linha => linha[colunas.status] === "Terceira Semana"),
+        "Quarta Semana": dadosColaborador.filter(linha => linha[colunas.status] === "Quarta Semana"),
+        "Resultado Final": dadosColaborador.filter(linha => linha[colunas.status] === "Resultado Final")
     };
+
+    // Redireciona para a tela de resultados com os dados
+    localStorage.setItem('dadosColaborador', JSON.stringify(semanas));
+    window.location.href = 'resultados.html';
 }
 
-// Carregar a planilha ao iniciar
-carregarPlanilha('https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?pli=1&gid=1159202773', 'FORMATAÇÃO');
+// Função para exibir os resultados
+function exibirResultados() {
+    const semanas = JSON.parse(localStorage.getItem('dadosColaborador'));
+    const container = document.getElementById('tabela-container');
+
+    for (const [semana, dados] of Object.entries(semanas)) {
+        if (dados.length > 0) {
+            const tabela = document.createElement('table');
+            tabela.innerHTML = `
+                <tr>
+                    <th>Código</th>
+                    <th>TMA</th>
+                    <th>TMIA</th>
+                    <th>TME</th>
+                    <th>Taxa de Trans.</th>
+                    <th>AB/PROD</th>
+                    <th>Pendências</th>
+                    <th>O.S/LOG</th>
+                    <th>Período</th>
+                </tr>
+            `;
+
+            dados.forEach(linha => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${linha[0]}</td>
+                    <td>${linha[1]}</td>
+                    <td>${linha[2]}</td>
+                    <td>${linha[3]}</td>
+                    <td>${linha[4]}</td>
+                    <td>${linha[5]}</td>
+                    <td>${linha[6]}</td>
+                    <td>${linha[7]}</td>
+                    <td>${linha[8]}</td>
+                `;
+                tabela.appendChild(tr);
+            });
+
+            container.appendChild(document.createElement('h2').textContent = semana);
+            container.appendChild(tabela);
+        }
+    }
+}
+
+// Exibe os resultados ao carregar a página de resultados
+if (window.location.pathname.endsWith('resultados.html')) {
+    exibirResultados();
+}
