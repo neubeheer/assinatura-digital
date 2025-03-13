@@ -1,10 +1,13 @@
 // Função para carregar dados da planilha
-async function carregarPlanilha(url, nomePlanilha) {
+async function carregarPlanilha(url) {
     try {
         const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
         const data = await response.arrayBuffer();
-        const workbook = XLSX.read(data, { type: 'array' });
-        const planilha = workbook.Sheets[nomePlanilha];
+        const workbook = XLSX.read(data, { type: 'array' }); // Usando a biblioteca SheetJS
+        const planilha = workbook.Sheets[workbook.SheetNames[0]];
         return XLSX.utils.sheet_to_json(planilha, { header: 1 });
     } catch (error) {
         console.error("Erro ao carregar a planilha:", error);
@@ -21,9 +24,8 @@ async function consultarColaborador() {
         return;
     }
 
-    const url = 'https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?usp=sharing'; // Substitua pela URL da planilha
-    const nomePlanilha = 'FORMATAÇÃO'; // Substitua pelo nome da planilha
-    const dados = await carregarPlanilha(url, nomePlanilha);
+    const url = 'https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/export?format=xlsx';
+    const dados = await carregarPlanilha(url);
 
     if (dados.length === 0) {
         alert("Nenhum dado encontrado para o colaborador.");
