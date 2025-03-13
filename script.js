@@ -1,10 +1,16 @@
 // Função para carregar dados da planilha
 async function carregarPlanilha(url, nomePlanilha) {
-    const response = await fetch(url);
-    const data = await response.arrayBuffer();
-    const workbook = XLSX.read(data, { type: 'array' });
-    const planilha = workbook.Sheets[nomePlanilha];
-    return XLSX.utils.sheet_to_json(planilha, { header: 1 });
+    try {
+        const response = await fetch(url);
+        const data = await response.arrayBuffer();
+        const workbook = XLSX.read(data, { type: 'array' });
+        const planilha = workbook.Sheets[nomePlanilha];
+        return XLSX.utils.sheet_to_json(planilha, { header: 1 });
+    } catch (error) {
+        console.error("Erro ao carregar a planilha:", error);
+        alert("Erro ao carregar a planilha. Verifique o console para mais detalhes.");
+        return [];
+    }
 }
 
 // Função para consultar o colaborador
@@ -15,9 +21,14 @@ async function consultarColaborador() {
         return;
     }
 
-    const url = 'https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?gid=0#gid=0'; // Substitua pela URL da planilha
+    const url = 'https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?usp=sharing'; // Substitua pela URL da planilha
     const nomePlanilha = 'FORMATAÇÃO'; // Substitua pelo nome da planilha
     const dados = await carregarPlanilha(url, nomePlanilha);
+
+    if (dados.length === 0) {
+        alert("Nenhum dado encontrado para o colaborador.");
+        return;
+    }
 
     // Mapeamento das colunas (ajuste conforme sua planilha)
     const colunas = {
@@ -35,6 +46,11 @@ async function consultarColaborador() {
 
     // Filtra os dados do colaborador
     const dadosColaborador = dados.filter(linha => linha[colunas.codigo] === codigo);
+
+    if (dadosColaborador.length === 0) {
+        alert("Nenhum dado encontrado para o colaborador.");
+        return;
+    }
 
     // Separa os dados por semana
     const semanas = {
@@ -54,6 +70,11 @@ async function consultarColaborador() {
 function exibirResultados() {
     const semanas = JSON.parse(localStorage.getItem('dadosColaborador'));
     const container = document.getElementById('tabela-container');
+
+    if (!semanas) {
+        container.innerHTML = "<p>Nenhum dado encontrado.</p>";
+        return;
+    }
 
     for (const [semana, dados] of Object.entries(semanas)) {
         if (dados.length > 0) {
