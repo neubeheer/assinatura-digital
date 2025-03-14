@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Assinaturas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .signature-pad {
+            border: 1px solid #000;
+            margin: 20px 0;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons button {
+            margin: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Tabela de Assinaturas</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>TME</th>
+            <th>TMA</th>
+            <th>TMIA</th>
+            <th>TAXA DE TF.</th>
+            <th>AB/PROD</th>
+            <th>PENDÊNCIAS</th>
+            <th>O.S/LOG</th>
+            <th>PERÍODO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<button onclick="openModal('supervisor')">Assinar Supervisão</button>
+<button onclick="openModal('colaborador')">Assinar Colaborador(a)</button>
+<button onclick="saveAll()">Salvar Tudo</button>
+
+<div id="modalSupervisor" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('supervisor')">&times;</span>
+        <h3>Assinatura da Supervisão</h3>
+        <canvas id="signaturePadSupervisor" class="signature-pad" width="400" height="200"></canvas>
+        <div class="buttons">
+            <button onclick="clearSignature('supervisor')">Limpar</button>
+            <button onclick="saveSignature('supervisor')">Assinar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalColaborador" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('colaborador')">&times;</span>
+        <h3>Assinatura do Colaborador(a)</h3>
+        <canvas id="signaturePadColaborador" class="signature-pad" width="400" height="200"></canvas>
+        <div class="buttons">
+            <button onclick="clearSignature('colaborador')">Limpar</button>
+            <button onclick="saveSignature('colaborador')">Assinar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let supervisorSignature = null;
+    let colaboradorSignature = null;
+
+    function openModal(type) {
+        document.getElementById(`modal${type.charAt(0).toUpperCase() + type.slice(1)}`).style.display = 'block';
+    }
+
+    function closeModal(type) {
+        document.getElementById(`modal${type.charAt(0).toUpperCase() + type.slice(1)}`).style.display = 'none';
+    }
+
+    function clearSignature(type) {
+        const canvas = document.getElementById(`signaturePad${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function saveSignature(type) {
+        const canvas = document.getElementById(`signaturePad${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        const signature = canvas.toDataURL();
+        if (type === 'supervisor') {
+            supervisorSignature = signature;
+        } else {
+            colaboradorSignature = signature;
+        }
+        closeModal(type);
+    }
+
+    function saveAll() {
+        if (!supervisorSignature || !colaboradorSignature) {
+            alert('Por favor, assine ambas as assinaturas antes de salvar.');
+            return;
+        }
+
+        const data = {
+            supervisorSignature,
+            colaboradorSignature,
+            date: new Date().toLocaleDateString()
+        };
+
+        // Aqui você pode adicionar a lógica para salvar no Google Drive ou no GitHub
+        console.log('Dados salvos:', data);
+        alert('Dados salvos com sucesso!');
+    }
+</script>
+
+</body>
+</html>
