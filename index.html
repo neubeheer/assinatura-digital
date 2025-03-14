@@ -16,27 +16,31 @@
             font-family: Arial, sans-serif;
             box-sizing: border-box;
         }
+
+        /* Estilos para a tabela */
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 10pt; /* Tamanho da fonte da tabela */
         }
         th, td {
             border: 1px solid #000;
             padding: 8px;
             text-align: center;
         }
-        .signature-container {
-            margin-top: 20px;
+
+        /* Estilos para as letras */
+        .text-large {
+            font-size: 14pt; /* Tamanho da fonte maior */
         }
-        .signature-container a {
-            text-decoration: none;
-            color: inherit;
+        .text-medium {
+            font-size: 12pt; /* Tamanho da fonte médio */
         }
-        .signature-container a:hover {
-            color: #980000;
+        .text-small {
+            font-size: 10pt; /* Tamanho da fonte pequeno */
         }
 
-        /* Estilo para os modais (pop-ups) */
+        /* Estilos para os modais (pop-ups) */
         .modal {
             display: none; /* Escondido por padrão */
             position: fixed;
@@ -95,13 +99,13 @@
 
     <div class="signature-container">
         <p>
-            <strong>Assinatura da Supervisão:</strong>
+            <strong class="text-medium">Assinatura da Supervisão:</strong>
             <a href="#" id="open-signature-modal-supervisor">✏️</a>
             <div id="supervisor-signature-line" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
-            <strong>Data:__/__/____</strong>
+            <strong class="text-medium">Data:__/__/____</strong>
         </p>
         <p>
-            <strong>Assinatura do Colaborador(a):</strong>
+            <strong class="text-medium">Assinatura do Colaborador(a):</strong>
             <a href="#" id="open-signature-modal-colaborador">✏️</a>
             <div id="colaborador-signature-line" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
         </p>
