@@ -162,6 +162,24 @@
                 margin: 10px 0; /* Ajusta o espaçamento */
             }
         }
+
+        /* Estilo para o botão SALVAR */
+        .save-button {
+            background-color: #4CAF50; /* Cor de fundo verde */
+            color: white; /* Cor do texto branco */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px auto; /* Centraliza o botão */
+            border-radius: 5px; /* Bordas arredondadas */
+        }
+        .save-button .floppy-icon {
+            font-size: 20px; /* Tamanho do ícone */
+        }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
@@ -215,6 +233,12 @@
             </button>
         </div>
     </div>
+
+    <!-- Botão SALVAR -->
+    <button id="save-button" class="save-button">
+        <span class="floppy-icon">💾</span>
+        SALVAR
+    </button>
 
     <!-- Modal para assinatura do supervisor -->
     <div id="supervisor-signature-modal" class="modal">
