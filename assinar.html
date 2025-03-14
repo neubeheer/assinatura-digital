@@ -75,7 +75,7 @@
 <body>
     <div>
         <h1 style="text-align: center;">FEEDBACK - OMINI/TALK</h1>
-        <table>
+        <table id="data-table">
             <tr>
                 <th>TME</th>
                 <th>TMA</th>
@@ -85,15 +85,7 @@
                 <th>O.S/LOG</th>
                 <th>PERÍODO</th>
             </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+            <!-- As linhas da tabela serão preenchidas dinamicamente -->
         </table>
     </div>
 
@@ -139,6 +131,38 @@
     </div>
 
     <script>
+        // Função para carregar os dados da planilha do Google Sheets
+        async function loadSheetData() {
+            const spreadsheetId = 'https://docs.google.com/spreadsheets/d/1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ/edit?usp=sharing'; // Substitua pelo ID da sua planilha
+            const apiKey = 'AIzaSyDiCYaVwgq3gmuQWhZIICEJoN5iTwbo-AY'; // Substitua pela sua chave de API
+            const range = ''FORMATAÇÃO'!A1:J2'; // Intervalo de células (ajuste conforme necessário)
+
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const rows = data.values;
+
+                const table = document.getElementById('data-table');
+
+                rows.forEach(row => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell;
+                        tr.appendChild(td);
+                    });
+                    table.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            }
+        }
+
+        // Carregar os dados ao abrir a página
+        loadSheetData();
+
         // Funções para abrir/fechar os modais
         const supervisorModal = document.getElementById('supervisor-signature-modal');
         const colaboradorModal = document.getElementById('colaborador-signature-modal');
