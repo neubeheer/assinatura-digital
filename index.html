@@ -182,6 +182,24 @@
         .save-button .floppy-icon {
             font-size: 18px; /* Tamanho do ícone */
         }
+
+        /* Estilo para o botão SALVAR (DRIVER) */
+        .save-driver-button {
+            background-color: #2196F3; /* Cor de fundo azul */
+            color: white; /* Cor do texto branco */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px auto; /* Centraliza o botão */
+            border-radius: 5px; /* Bordas arredondadas */
+        }
+        .save-driver-button .cloud-icon {
+            font-size: 18px; /* Tamanho do ícone */
+        }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
@@ -242,6 +260,12 @@
     <button id="save-button" class="save-button">
         <span class="floppy-icon">💾</span>
         SALVAR
+    </button>
+
+    <!-- Botão SALVAR (DRIVER) -->
+    <button id="save-driver-button" class="save-driver-button">
+        <span class="cloud-icon">☁️</span>
+        SALVAR (DRIVER)
     </button>
 
     <!-- Modal para assinatura do supervisor -->
@@ -404,28 +428,4 @@
                 const dataURL = colaboradorSignaturePad.toDataURL();
                 const signatureImage = document.createElement('img');
                 signatureImage.src = dataURL;
-                signatureImage.classList.add('signature-image'); // Adiciona a classe para estilização
-                const colaboradorSignatureLine = document.getElementById('colaborador-signature-line');
-                colaboradorSignatureLine.innerHTML = '';
-                colaboradorSignatureLine.appendChild(signatureImage);
-                colaboradorModal.style.display = 'none';
-            }
-        });
-
-        // Função para converter a página em PDF e fazer o download
-        document.getElementById('save-button').addEventListener('click', () => {
-            const element = document.body; // Seleciona o corpo da página
-            const options = {
-                margin: [10, 10], // Margens do PDF
-                filename: 'feedback.pdf', // Nome do arquivo
-                image: { type: 'jpeg', quality: 0.98 }, // Qualidade da imagem
-                html2canvas: { scale: 2 }, // Escala para melhor qualidade
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // Formato A4
-            };
-
-            // Gera o PDF e faz o download
-            html2pdf().from(element).set(options).save();
-        });
-    </script>
-</body>
-</html>
+                signatureImage.classList.add('signature-image'); // Adiciona a
