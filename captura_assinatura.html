@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        canvas {
+            border: 1px solid #000;
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+    <!-- Incluir a biblioteca Signature Pad -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+</head>
+<body>
+    <h1>Captura de Assinatura</h1>
+    <canvas id="signature-pad" width="400" height="200"></canvas>
+    <br>
+    <button id="clear-signature">Limpar</button>
+    <button id="save-signature">Salvar</button>
+
+    <script>
+        // Inicializar o Signature Pad
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+
+        // Botão para limpar a assinatura
+        document.getElementById('clear-signature').addEventListener('click', () => {
+            signaturePad.clear();
+        });
+
+        // Botão para salvar a assinatura
+        document.getElementById('save-signature').addEventListener('click', () => {
+            if (signaturePad.isEmpty()) {
+                alert('Por favor, forneça uma assinatura.');
+            } else {
+                const dataURL = signaturePad.toDataURL(); // Salva a assinatura como imagem
+                alert('Assinatura salva!');
+                // Aqui você pode enviar a imagem para o servidor ou exibi-la na página principal
+                window.opener.postMessage(dataURL, '*'); // Envia a assinatura de volta para a página principal
+                window.close(); // Fecha a janela de captura de assinatura
+            }
+        });
+    </script>
+</body>
+</html>
