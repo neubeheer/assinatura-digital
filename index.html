@@ -71,49 +71,31 @@
 
         /* Estilo para o container das assinaturas e data */
         .signature-container {
-            display: flex; /* Usa Flexbox para alinhar os itens */
-            justify-content: space-between; /* Espaço entre os itens */
-            align-items: center; /* Alinha os itens verticalmente */
-            margin-top: 20px; /* Espaçamento acima do container */
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end; /* Alinha os itens na parte inferior */
+            margin-top: 20px;
         }
 
         /* Estilo para cada bloco de assinatura */
         .signature-block {
             display: flex;
-            align-items: center; /* Alinha os itens verticalmente */
+            flex-direction: column; /* Alinha os itens verticalmente */
+            align-items: flex-start; /* Alinha os itens à esquerda */
         }
 
         /* Estilo para a linha de assinatura */
         .signature-line {
-            display: inline-block;
-            position: relative;
-            width: 150px;
-            height: 50px;
+            width: 150px; /* Largura da linha de assinatura */
             border-bottom: 1px solid #000;
-            margin-left: 10px; /* Espaço entre o ícone e a linha */
-        }
-
-        /* Estilo para o botão de assinatura */
-        .signature-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            display: inline-flex;
-            align-items: flex-end;
-        }
-
-        /* Estilo para o ícone do lápis */
-        .pencil-icon {
-            font-size: 20px;
-            line-height: 1;
-            margin-right: 5px;
+            margin-top: 5px; /* Espaço entre o texto e a linha */
         }
 
         /* Estilo para a data */
         .date-container {
             font-size: 12pt;
             margin: 0 20px; /* Espaço entre a data e as assinaturas */
+            align-self: flex-end; /* Alinha a data na parte inferior */
         }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
@@ -148,10 +130,7 @@
         <!-- Assinatura da Supervisão -->
         <div class="signature-block">
             <strong class="text-small">Assinatura da Supervisão:</strong>
-            <button id="open-signature-modal-supervisor" class="signature-button">
-                <span class="pencil-icon">✏️</span>
-                <span id="supervisor-signature-line" class="signature-line"></span>
-            </button>
+            <div id="supervisor-signature-line" class="signature-line"></div>
         </div>
 
         <!-- Data -->
@@ -162,10 +141,7 @@
         <!-- Assinatura do Colaborador(a) -->
         <div class="signature-block">
             <strong class="text-small">Assinatura do Colaborador(a):</strong>
-            <button id="open-signature-modal-colaborador" class="signature-button">
-                <span class="pencil-icon">✏️</span>
-                <span id="colaborador-signature-line" class="signature-line"></span>
-            </button>
+            <div id="colaborador-signature-line" class="signature-line"></div>
         </div>
     </div>
 
