@@ -1,183 +1,231 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assinatura Eletrônica</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <style type="text/css">
+        /* Estilos para a folha A4 */
+        @page {
+            size: A4;
+            margin: 0;
         }
+        body {
+            width: 210mm; /* Largura de uma folha A4 */
+            height: 297mm; /* Altura de uma folha A4 */
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* Estilos para a tabela */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
+            font-size: 10pt; /* Tamanho da fonte da tabela */
         }
         th, td {
-            padding: 10px;
+            border: 1px solid #000;
+            padding: 8px;
             text-align: center;
         }
+
+        /* Estilos para as letras */
+        .text-large {
+            font-size: 14pt; /* Tamanho da fonte maior */
+        }
+        .text-medium {
+            font-size: 12pt; /* Tamanho da fonte médio */
+        }
+        .text-small {
+            font-size: 10pt; /* Tamanho da fonte pequeno */
+        }
+
+        /* Estilos para os modais (pop-ups) */
         .modal {
-            display: none;
+            display: none; /* Escondido por padrão */
             position: fixed;
-            z-index: 1;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
+            justify-content: center;
+            align-items: center;
         }
         .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
+            background-color: white;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            border-radius: 8px;
             text-align: center;
         }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .signature-pad {
+        canvas {
             border: 1px solid #000;
-            margin: 20px 0;
-        }
-        .buttons {
             margin-top: 20px;
         }
-        .buttons button {
-            margin: 5px;
+        button {
+            margin-top: 10px;
             padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
         }
-        .signature-line {
-            display: inline-block;
-            width: 200px;
-            border-bottom: 1px solid #000;
-            margin-left: 10px;
-        }
+
+        /* Estilos para o ícone de lápis */
         .pencil-icon {
             cursor: pointer;
             font-size: 20px;
         }
+
+        /* Estilos para a linha de assinatura */
+        .signature-line {
+            display: inline-block;
+            width: 150px;
+            height: 50px;
+            border-bottom: 1px solid #000;
+            position: relative;
+        }
     </style>
+    <!-- Incluir a biblioteca Signature Pad -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
+    <!-- Tabela e campos de assinatura -->
+    <div>
+        <h2>DE:</h2>
+        <table>
+            <tr>
+                <th>TME</th>
+                <th>TMA</th>
+                <th>TMIA</th>
+                <th>TAXA DE TF.</th>
+                <th>AB/PROD</th>
+                <th>PENDÊNCIAS</th>
+                <th>O.S/LOG</th>
+                <th>PERÍODO</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
 
-<h2>Tabela de Assinaturas</h2>
+    <!-- Campos de Assinatura -->
+    <div class="signature-container">
+        <p>
+            <strong class="text-medium">Assinatura da Supervisão:</strong>
+            <span class="pencil-icon" onclick="openModal('supervisor')">✏️</span>
+            <div id="supervisor-signature-line" class="signature-line"></div>
+            <strong class="text-medium">Data:__/__/____</strong>
+        </p>
+        <p>
+            <strong class="text-medium">Assinatura do Colaborador(a):</strong>
+            <span class="pencil-icon" onclick="openModal('colaborador')">✏️</span>
+            <div id="colaborador-signature-line" class="signature-line"></div>
+        </p>
+    </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>TME</th>
-            <th>TMA</th>
-            <th>TMIA</th>
-            <th>TAXA DE TF.</th>
-            <th>AB/PROD</th>
-            <th>PENDÊNCIAS</th>
-            <th>O.S/LOG</th>
-            <th>PERÍODO</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
-
-<p>
-    Assinatura da Supervisão: 
-    <span class="pencil-icon" onclick="openModal('supervisor')">✏️</span>
-    <span class="signature-line" id="supervisorSignatureLine"></span>
-    Data: __/__/____
-</p>
-<p>
-    Assinatura do Colaborador(a): 
-    <span class="pencil-icon" onclick="openModal('colaborador')">✏️</span>
-    <span class="signature-line" id="colaboradorSignatureLine"></span>
-</p>
-
-<div id="modalSupervisor" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('supervisor')">&times;</span>
-        <h3>Assinatura da Supervisão</h3>
-        <canvas id="signaturePadSupervisor" class="signature-pad" width="400" height="200"></canvas>
-        <div class="buttons">
+    <!-- Modal para assinatura do supervisor -->
+    <div id="supervisor-signature-modal" class="modal">
+        <div class="modal-content">
+            <h2>Assinatura do Supervisor</h2>
+            <canvas id="supervisor-signature-pad" width="400" height="200"></canvas>
+            <br>
             <button onclick="clearSignature('supervisor')">Limpar</button>
-            <button onclick="saveSignature('supervisor')">Assinar</button>
+            <button onclick="saveSignature('supervisor')">Salvar</button>
+            <button onclick="closeModal('supervisor')">Fechar</button>
         </div>
     </div>
-</div>
 
-<div id="modalColaborador" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('colaborador')">&times;</span>
-        <h3>Assinatura do Colaborador(a)</h3>
-        <canvas id="signaturePadColaborador" class="signature-pad" width="400" height="200"></canvas>
-        <div class="buttons">
+    <!-- Modal para assinatura do colaborador -->
+    <div id="colaborador-signature-modal" class="modal">
+        <div class="modal-content">
+            <h2>Assinatura do Colaborador(a)</h2>
+            <canvas id="colaborador-signature-pad" width="400" height="200"></canvas>
+            <br>
             <button onclick="clearSignature('colaborador')">Limpar</button>
-            <button onclick="saveSignature('colaborador')">Assinar</button>
+            <button onclick="saveSignature('colaborador')">Salvar</button>
+            <button onclick="closeModal('colaborador')">Fechar</button>
         </div>
     </div>
-</div>
 
-<script>
-    let supervisorSignature = null;
-    let colaboradorSignature = null;
+    <!-- Botão para salvar tudo -->
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="saveAll()">Salvar Tudo</button>
+    </div>
 
-    function openModal(type) {
-        document.getElementById(`modal${type.charAt(0).toUpperCase() + type.slice(1)}`).style.display = 'block';
-    }
+    <script>
+        // Variáveis para armazenar as assinaturas
+        let supervisorSignature = null;
+        let colaboradorSignature = null;
 
-    function closeModal(type) {
-        document.getElementById(`modal${type.charAt(0).toUpperCase() + type.slice(1)}`).style.display = 'none';
-    }
-
-    function clearSignature(type) {
-        const canvas = document.getElementById(`signaturePad${type.charAt(0).toUpperCase() + type.slice(1)}`);
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function saveSignature(type) {
-        const canvas = document.getElementById(`signaturePad${type.charAt(0).toUpperCase() + type.slice(1)}`);
-        const signature = canvas.toDataURL();
-        const signatureLine = document.getElementById(`${type}SignatureLine`);
-
-        // Exibe a assinatura na linha correspondente
-        signatureLine.innerHTML = `<img src="${signature}" alt="Assinatura" style="width: 100px; height: auto;">`;
-
-        if (type === 'supervisor') {
-            supervisorSignature = signature;
-        } else {
-            colaboradorSignature = signature;
+        // Função para abrir o modal
+        function openModal(type) {
+            document.getElementById(`${type}-signature-modal`).style.display = 'flex';
         }
-        closeModal(type);
-    }
-</script>
 
+        // Função para fechar o modal
+        function closeModal(type) {
+            document.getElementById(`${type}-signature-modal`).style.display = 'none';
+        }
+
+        // Função para limpar a assinatura
+        function clearSignature(type) {
+            const canvas = document.getElementById(`${type}-signature-pad`);
+            const signaturePad = new SignaturePad(canvas);
+            signaturePad.clear();
+        }
+
+        // Função para salvar a assinatura
+        function saveSignature(type) {
+            const canvas = document.getElementById(`${type}-signature-pad`);
+            const signaturePad = new SignaturePad(canvas);
+
+            if (signaturePad.isEmpty()) {
+                alert('Por favor, forneça uma assinatura.');
+            } else {
+                const dataURL = signaturePad.toDataURL(); // Salva a assinatura como imagem
+
+                // Exibir a assinatura salva sobre a linha de assinatura
+                const signatureImage = document.createElement('img');
+                signatureImage.src = dataURL;
+                signatureImage.style.width = '150px'; // Ajuste o tamanho conforme necessário
+                signatureImage.style.position = 'absolute';
+                signatureImage.style.top = '0';
+                signatureImage.style.left = '0';
+
+                // Substituir o ícone de lápis pela imagem da assinatura
+                const signatureLine = document.getElementById(`${type}-signature-line`);
+                signatureLine.innerHTML = ''; // Limpa o conteúdo anterior
+                signatureLine.appendChild(signatureImage);
+
+                if (type === 'supervisor') {
+                    supervisorSignature = dataURL;
+                } else {
+                    colaboradorSignature = dataURL;
+                }
+
+                closeModal(type); // Fecha o modal
+            }
+        }
+
+        // Função para salvar tudo
+        function saveAll() {
+            if (!supervisorSignature || !colaboradorSignature) {
+                alert('Por favor, assine ambas as assinaturas antes de salvar.');
+                return;
+            }
+
+            // Aqui você pode adicionar a lógica para salvar no Google Drive ou GitHub
+            console.log('Assinatura do Supervisor:', supervisorSignature);
+            console.log('Assinatura do Colaborador:', colaboradorSignature);
+            alert('Dados salvos com sucesso!');
+        }
+    </script>
 </body>
 </html>
