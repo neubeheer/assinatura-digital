@@ -3,321 +3,35 @@
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <style type="text/css">
-        /* Estilos para a folha A4 */
-        @page {
-            size: A4;
-            margin: 0;
-        }
-        body {
-            width: 210mm; /* Largura de uma folha A4 */
-            height: 297mm; /* Altura de uma folha A4 */
-            margin: 0 auto;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            box-sizing: border-box;
-        }
-
-        /* Estilos para a tabela */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10pt; /* Tamanho da fonte da tabela */
-        }
-        th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: center;
-        }
-
-        /* Estilos para as letras */
-        .text-large {
-            font-size: 14pt; /* Tamanho da fonte maior */
-        }
-        .text-medium {
-            font-size: 12pt; /* Tamanho da fonte médio */
-        }
-        .text-small {
-            font-size: 10pt; /* Tamanho da fonte pequeno */
-        }
-
-        /* Estilos para os modais (pop-ups) */
-        .modal {
-            display: none; /* Escondido por padrão */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        canvas {
-            border: 1px solid #000;
-            margin-top: 20px;
-        }
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+        /* Estilos existentes... */
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
-    <!-- Primeira Semana -->
     <div>
-        <h2>PRIMEIRA SEMANA DE:</h2>
+        <h1 style="text-align: center;">FEEDBACK - OMINI/TALK</h1>
         <table>
-            <tr>
-                <th>TME</th>
-                <th>TMA</th>
-                <th>TMIA</th>
-                <th>TAXA DE TF.</th>
-                <th>AB/PROD</th>
-                <th>PENDÊNCIAS</th>
-                <th>O.S/LOG</th>
-                <th>PERÍODO</th>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>TME</th>
+                    <th>TMA</th>
+                    <th>TMIA</th>
+                    <th>AB/PROD</th>
+                    <th>PENDÊNCIAS</th>
+                    <th>O.S/LOG</th>
+                    <th>PERÍODO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- As linhas da tabela serão preenchidas dinamicamente aqui -->
+            </tbody>
         </table>
     </div>
 
-    <!-- Campos de Assinatura da Primeira Semana -->
-    <div class="signature-container">
-        <p>
-            <strong class="text-medium">Assinatura da Supervisão:</strong>
-            <a href="#" id="open-signature-modal-supervisor-1">✏️</a>
-            <div id="supervisor-signature-line-1" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
-            <strong class="text-medium">Data:__/__/____</strong>
-        </p>
-        <p>
-            <strong class="text-medium">Assinatura do Colaborador(a):</strong>
-            <a href="#" id="open-signature-modal-colaborador-1">✏️</a>
-            <div id="colaborador-signature-line-1" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
-        </p>
-    </div>
+    <!-- Restante do código HTML... -->
 
-    <!-- Modal para assinatura do supervisor (Primeira Semana) -->
-    <div id="supervisor-signature-modal-1" class="modal">
-        <div class="modal-content">
-            <h2>Assinatura do Supervisor</h2>
-            <canvas id="supervisor-signature-pad-1" width="400" height="200"></canvas>
-            <br>
-            <button id="clear-supervisor-signature-1">Limpar</button>
-            <button id="save-supervisor-signature-1">Salvar</button>
-            <button id="close-supervisor-signature-modal-1">Fechar</button>
-        </div>
-    </div>
-
-    <!-- Modal para assinatura do colaborador (Primeira Semana) -->
-    <div id="colaborador-signature-modal-1" class="modal">
-        <div class="modal-content">
-            <h2>Assinatura do Colaborador(a)</h2>
-            <canvas id="colaborador-signature-pad-1" width="400" height="200"></canvas>
-            <br>
-            <button id="clear-colaborador-signature-1">Limpar</button>
-            <button id="save-colaborador-signature-1">Salvar</button>
-            <button id="close-colaborador-signature-modal-1">Fechar</button>
-        </div>
-    </div>
-
-    <!-- Segunda Semana -->
-    <div>
-        <h2>SEGUNDA SEMANA DE:</h2>
-        <table>
-            <tr>
-                <th>TME</th>
-                <th>TMA</th>
-                <th>TMIA</th>
-                <th>TAXA DE TF.</th>
-                <th>AB/PROD</th>
-                <th>PENDÊNCIAS</th>
-                <th>O.S/LOG</th>
-                <th>PERÍODO</th>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Campos de Assinatura da Segunda Semana -->
-    <div class="signature-container">
-        <p>
-            <strong class="text-medium">Assinatura da Supervisão:</strong>
-            <a href="#" id="open-signature-modal-supervisor-2">✏️</a>
-            <div id="supervisor-signature-line-2" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
-            <strong class="text-medium">Data:__/__/____</strong>
-        </p>
-        <p>
-            <strong class="text-medium">Assinatura do Colaborador(a):</strong>
-            <a href="#" id="open-signature-modal-colaborador-2">✏️</a>
-            <div id="colaborador-signature-line-2" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
-        </p>
-    </div>
-
-    <!-- Modal para assinatura do supervisor (Segunda Semana) -->
-    <div id="supervisor-signature-modal-2" class="modal">
-        <div class="modal-content">
-            <h2>Assinatura do Supervisor</h2>
-            <canvas id="supervisor-signature-pad-2" width="400" height="200"></canvas>
-            <br>
-            <button id="clear-supervisor-signature-2">Limpar</button>
-            <button id="save-supervisor-signature-2">Salvar</button>
-            <button id="close-supervisor-signature-modal-2">Fechar</button>
-        </div>
-    </div>
-
-    <!-- Modal para assinatura do colaborador (Segunda Semana) -->
-    <div id="colaborador-signature-modal-2" class="modal">
-        <div class="modal-content">
-            <h2>Assinatura do Colaborador(a)</h2>
-            <canvas id="colaborador-signature-pad-2" width="400" height="200"></canvas>
-            <br>
-            <button id="clear-colaborador-signature-2">Limpar</button>
-            <button id="save-colaborador-signature-2">Salvar</button>
-            <button id="close-colaborador-signature-modal-2">Fechar</button>
-        </div>
-    </div>
-
-    <!-- Botão para salvar tudo -->
-    <div style="text-align: center; margin-top: 20px;">
-        <button id="save-all">Salvar Tudo</button>
-    </div>
-
-    <!-- Modal para salvar no Google Drive -->
-    <div id="save-modal" class="modal">
-        <div class="modal-content">
-            <h2>Salvar no Google Drive</h2>
-            <label for="file-name">Nome do Arquivo:</label>
-            <input type="text" id="file-name" placeholder="Digite o nome do arquivo">
-            <br>
-            <button id="confirm-save">Salvar</button>
-            <button id="close-save-modal">Fechar</button>
-        </div>
-    </div>
-
-    <script>
-        // Funções para abrir/fechar os modais
-        function setupModal(modalId, openButtonId, closeButtonId) {
-            const modal = document.getElementById(modalId);
-            const openButton = document.getElementById(openButtonId);
-            const closeButton = document.getElementById(closeButtonId);
-
-            openButton.addEventListener('click', () => {
-                modal.style.display = 'flex';
-            });
-
-            closeButton.addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-        }
-
-        // Configurar modais da Primeira Semana
-        setupModal('supervisor-signature-modal-1', 'open-signature-modal-supervisor-1', 'close-supervisor-signature-modal-1');
-        setupModal('colaborador-signature-modal-1', 'open-signature-modal-colaborador-1', 'close-colaborador-signature-modal-1');
-
-        // Configurar modais da Segunda Semana
-        setupModal('supervisor-signature-modal-2', 'open-signature-modal-supervisor-2', 'close-supervisor-signature-modal-2');
-        setupModal('colaborador-signature-modal-2', 'open-signature-modal-colaborador-2', 'close-colaborador-signature-modal-2');
-
-        // Configurar modal de salvar
-        setupModal('save-modal', 'save-all', 'close-save-modal');
-
-        // Inicializar Signature Pads
-        const signaturePads = [
-            { canvasId: 'supervisor-signature-pad-1', lineId: 'supervisor-signature-line-1' },
-            { canvasId: 'colaborador-signature-pad-1', lineId: 'colaborador-signature-line-1' },
-            { canvasId: 'supervisor-signature-pad-2', lineId: 'supervisor-signature-line-2' },
-            { canvasId: 'colaborador-signature-pad-2', lineId: 'colaborador-signature-line-2' }
-        ];
-
-        signaturePads.forEach(({ canvasId, lineId }) => {
-            const canvas = document.getElementById(canvasId);
-            const signaturePad = new SignaturePad(canvas);
-
-            // Função para desenhar a linha guia no canvas
-            function drawGuideLine() {
-                const ctx = canvas.getContext('2d');
-                ctx.beginPath();
-                ctx.strokeStyle = '#ccc'; // Cor da linha guia
-                ctx.lineWidth = 1; // Espessura da linha
-                ctx.moveTo(0, canvas.height / 2); // Início da linha (meio do canvas)
-                ctx.lineTo(canvas.width, canvas.height / 2); // Fim da linha (meio do canvas)
-                ctx.stroke();
-            }
-
-            drawGuideLine();
-
-            // Botão para limpar a assinatura
-            document.getElementById(`clear-${canvasId}`).addEventListener('click', () => {
-                signaturePad.clear();
-                drawGuideLine();
-            });
-
-            // Botão para salvar a assinatura
-            document.getElementById(`save-${canvasId}`).addEventListener('click', () => {
-                if (signaturePad.isEmpty()) {
-                    alert('Por favor, forneça uma assinatura.');
-                } else {
-                    const dataURL = signaturePad.toDataURL(); // Salva a assinatura como imagem
-
-                    // Exibir a assinatura salva sobre a linha de assinatura
-                    const signatureImage = document.createElement('img');
-                    signatureImage.src = dataURL;
-                    signatureImage.style.width = '150px'; // Ajuste o tamanho conforme necessário
-                    signatureImage.style.position = 'absolute';
-                    signatureImage.style.top = '0';
-                    signatureImage.style.left = '0';
-
-                    // Substituir o ícone de lápis pela imagem da assinatura
-                    const signatureLine = document.getElementById(lineId);
-                    signatureLine.innerHTML = ''; // Limpa o conteúdo anterior
-                    signatureLine.appendChild(signatureImage);
-
-                    document.getElementById(`close-${canvasId.replace('pad', 'modal')}`).click(); // Fecha o modal
-                }
-            });
-        });
-
-        // Botão para salvar tudo no Google Drive
-        document.getElementById('confirm-save').addEventListener('click', () => {
-            const fileName = document.getElementById('file-name').value;
-            if (!fileName) {
-                alert('Por favor, insira um nome para o arquivo.');
-                return;
-            }
-
-            // Aqui você pode adicionar a lógica para salvar no Google Drive
-            // Exemplo: usar a API do Google Drive para salvar as assinaturas e informações
-            alert(`Arquivo "${fileName}" salvo com sucesso!`);
-            document.getElementById('close-save-modal').click(); // Fecha o modal
-        });
-    </script>
+    <!-- Inclua o script para carregar os dados da planilha -->
+    <script src="loadData.js"></script>
 </body>
 </html>
