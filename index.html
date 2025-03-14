@@ -57,6 +57,7 @@
             padding: 20px;
             border-radius: 8px;
             text-align: center;
+            position: relative; /* Permite posicionar a linha guia */
         }
         canvas {
             border: 1px solid #000;
@@ -113,6 +114,17 @@
         .date-container {
             font-size: 12pt;
             margin: 0 20px; /* Espaço entre a data e as assinaturas */
+        }
+
+        /* Estilo para a linha guia no modal */
+        .guide-line {
+            position: absolute;
+            top: 50%; /* Posiciona a linha no meio do modal */
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #ccc; /* Cor da linha guia */
+            z-index: 1; /* Garante que a linha fique acima do canvas */
         }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
@@ -172,6 +184,7 @@
     <div id="supervisor-signature-modal" class="modal">
         <div class="modal-content">
             <h2>Assinatura do Supervisor</h2>
+            <div class="guide-line"></div> <!-- Linha guia -->
             <canvas id="supervisor-signature-pad" width="400" height="200"></canvas>
             <br>
             <button id="clear-supervisor-signature">Limpar</button>
@@ -184,6 +197,7 @@
     <div id="colaborador-signature-modal" class="modal">
         <div class="modal-content">
             <h2>Assinatura do Colaborador(a)</h2>
+            <div class="guide-line"></div> <!-- Linha guia -->
             <canvas id="colaborador-signature-pad" width="400" height="200"></canvas>
             <br>
             <button id="clear-colaborador-signature">Limpar</button>
@@ -280,6 +294,7 @@
         const colaboradorCanvas = document.getElementById('colaborador-signature-pad');
         const colaboradorSignaturePad = new SignaturePad(colaboradorCanvas);
 
+        // Função para desenhar a linha guia no canvas
         function drawGuideLine(canvas) {
             const ctx = canvas.getContext('2d');
             ctx.beginPath();
