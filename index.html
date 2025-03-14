@@ -1,21 +1,122 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acesso</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Inclua a biblioteca SheetJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <style type="text/css">
+        /* Estilos para a folha A4 */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        body {
+            width: 210mm; /* Largura de uma folha A4 */
+            height: 297mm; /* Altura de uma folha A4 */
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+        .signature-container {
+            margin-top: 20px;
+        }
+        .signature-container a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .signature-container a:hover {
+            color: #980000;
+        }
+
+        /* Estilo para aumentar o tamanho da fonte dos textos em negrito */
+        .signature-container strong {
+            font-size: 14px; /* Altere o valor conforme necessário */
+        }
+    </style>
 </head>
 <body>
-    <h1>Consulta de Desempenho</h1>
-    <div class="form-container">
-        <label for="codigo-colaborador">Código do Colaborador:</label>
-        <input type="text" id="codigo-colaborador" placeholder="Digite o código">
-        <button onclick="consultarColaborador()">Consultar</button>
+    <div>
+        <h1 style="text-align: center;">FEEDBACK - OMINI/TALK</h1>
+        <table>
+            <tr>
+                <th>TME</th>
+                <th>TMA</th>
+                <th>TMIA</th>
+                <th>AB/PROD</th>
+                <th>PENDÊNCIAS</th>
+                <th>O.S/LOG</th>
+                <th>PERÍODO</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
     </div>
 
-    <script src="script.js"></script>
+    <div class="signature-container">
+        <p>
+            <strong>Assinatura da Supervisão:</strong>
+            <a href="captura_assinatura.html" target="_blank">✏️</a> ________________________
+            <strong>Data:__/__/____</strong>
+        </p>
+        <p>
+            <strong>Assinatura do Colaborador(a):</strong>
+            <a href="captura_assinatura.html" target="_blank">✏️</a> __________________________
+        </p>
+    </div>
+
+    <!-- Repetir para outras semanas -->
+    <div>
+        <h2>PRIMEIRA SEMANA DE:</h2>
+        <table>
+            <tr>
+                <th>TME</th>
+                <th>TMA</th>
+                <th>TMIA</th>
+                <th>TAXA DE TF.</th>
+                <th>AB/PROD</th>
+                <th>PENDÊNCIAS</th>
+                <th>O.S/LOG</th>
+                <th>PERÍODO</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="signature-container">
+            <p>
+                <strong>Assinatura da Supervisão:</strong>
+                <a href="captura_assinatura.html" target="_blank">✏️</a> ________________________
+                <strong>Data:__/__/____</strong>
+            </p>
+            <p>
+                <strong>Assinatura do Colaborador(a):</strong>
+                <a href="captura_assinatura.html" target="_blank">✏️</a> __________________________
+            </p>
+        </div>
+    </div>
+
+    <!-- Adicionar mais seções para SEGUNDA, TERCEIRA e QUARTA SEMANAS conforme necessário -->
 </body>
 </html>
