@@ -69,10 +69,11 @@
             cursor: pointer;
         }
 
-        /* Estilo para o container das assinaturas */
+        /* Estilo para o container das assinaturas e data */
         .signature-container {
-            display: flex; /* Usa Flexbox para alinhar as assinaturas */
-            justify-content: space-between; /* Espaço entre as assinaturas */
+            display: flex; /* Usa Flexbox para alinhar os itens */
+            justify-content: space-between; /* Espaço entre os itens */
+            align-items: center; /* Alinha os itens verticalmente */
             margin-top: 20px; /* Espaçamento acima do container */
         }
 
@@ -89,7 +90,7 @@
             width: 150px;
             height: 50px;
             border-bottom: 1px solid #000;
-            margin-left: 10px; /* Espaço entre o botão e a linha */
+            margin-left: 10px; /* Espaço entre o ícone e a linha */
         }
 
         /* Estilo para o botão de assinatura */
@@ -108,16 +109,17 @@
             line-height: 1;
             margin-right: 5px;
         }
+
+        /* Estilo para a data */
+        .date-container {
+            font-size: 12pt;
+            margin: 0 20px; /* Espaço entre a data e as assinaturas */
+        }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
-    <!-- Container para a data -->
-    <div class="date-container">
-        Data: <span id="current-date"></span>
-    </div>
-
     <div>
         <h1 style="text-align: center;">FEEDBACK - OMINI/TALK</h1>
         <table>
@@ -141,7 +143,7 @@
         </table>
     </div>
 
-    <!-- Container das assinaturas -->
+    <!-- Container das assinaturas e data -->
     <div class="signature-container">
         <!-- Assinatura da Supervisão -->
         <div class="signature-block">
@@ -150,6 +152,11 @@
                 <span class="pencil-icon">✏️</span>
                 <span id="supervisor-signature-line" class="signature-line"></span>
             </button>
+        </div>
+
+        <!-- Data -->
+        <div class="date-container">
+            Data: <span id="current-date"></span>
         </div>
 
         <!-- Assinatura do Colaborador(a) -->
