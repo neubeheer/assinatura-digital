@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabela de Assinaturas</title>
+    <title>Assinatura Eletrônica</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,6 +65,16 @@
             padding: 10px 20px;
             cursor: pointer;
         }
+        .signature-line {
+            display: inline-block;
+            width: 200px;
+            border-bottom: 1px solid #000;
+            margin-left: 10px;
+        }
+        .pencil-icon {
+            cursor: pointer;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -98,9 +108,17 @@
     </tbody>
 </table>
 
-<button onclick="openModal('supervisor')">Assinar Supervisão</button>
-<button onclick="openModal('colaborador')">Assinar Colaborador(a)</button>
-<button onclick="saveAll()">Salvar Tudo</button>
+<p>
+    Assinatura da Supervisão: 
+    <span class="pencil-icon" onclick="openModal('supervisor')">✏️</span>
+    <span class="signature-line" id="supervisorSignatureLine"></span>
+    Data: __/__/____
+</p>
+<p>
+    Assinatura do Colaborador(a): 
+    <span class="pencil-icon" onclick="openModal('colaborador')">✏️</span>
+    <span class="signature-line" id="colaboradorSignatureLine"></span>
+</p>
 
 <div id="modalSupervisor" class="modal">
     <div class="modal-content">
@@ -147,29 +165,17 @@
     function saveSignature(type) {
         const canvas = document.getElementById(`signaturePad${type.charAt(0).toUpperCase() + type.slice(1)}`);
         const signature = canvas.toDataURL();
+        const signatureLine = document.getElementById(`${type}SignatureLine`);
+
+        // Exibe a assinatura na linha correspondente
+        signatureLine.innerHTML = `<img src="${signature}" alt="Assinatura" style="width: 100px; height: auto;">`;
+
         if (type === 'supervisor') {
             supervisorSignature = signature;
         } else {
             colaboradorSignature = signature;
         }
         closeModal(type);
-    }
-
-    function saveAll() {
-        if (!supervisorSignature || !colaboradorSignature) {
-            alert('Por favor, assine ambas as assinaturas antes de salvar.');
-            return;
-        }
-
-        const data = {
-            supervisorSignature,
-            colaboradorSignature,
-            date: new Date().toLocaleDateString()
-        };
-
-        // Aqui você pode adicionar a lógica para salvar no Google Drive ou no GitHub
-        console.log('Dados salvos:', data);
-        alert('Dados salvos com sucesso!');
     }
 </script>
 
