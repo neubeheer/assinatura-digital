@@ -197,7 +197,7 @@
             margin: 20px auto; /* Centraliza o botão */
             border-radius: 5px; /* Bordas arredondadas */
         }
-        .save-driver-button .cloud-icon {
+        .save-driver-button .floppy-icon {
             font-size: 18px; /* Tamanho do ícone */
         }
     </style>
@@ -256,17 +256,17 @@
         </div>
     </div>
 
-    <!-- Botão SALVAR -->
-    <button id="save-button" class="save-button">
-        <span class="floppy-icon">💾</span>
-        SALVAR
-    </button>
-
-    <!-- Botão SALVAR (DRIVER) -->
-    <button id="save-driver-button" class="save-driver-button">
-        <span class="cloud-icon">☁️</span>
-        SALVAR (DRIVER)
-    </button>
+    <!-- Botões SALVAR e SALVAR (DRIVER) -->
+    <div style="display: flex; justify-content: center; gap: 20px;">
+        <button id="save-button" class="save-button">
+            <span class="floppy-icon">💾</span>
+            SALVAR
+        </button>
+        <button id="save-driver-button" class="save-driver-button">
+            <span class="floppy-icon">💾</span>
+            SALVAR (DRIVER)
+        </button>
+    </div>
 
     <!-- Modal para assinatura do supervisor -->
     <div id="supervisor-signature-modal" class="modal">
@@ -428,4 +428,28 @@
                 const dataURL = colaboradorSignaturePad.toDataURL();
                 const signatureImage = document.createElement('img');
                 signatureImage.src = dataURL;
-                signatureImage.classList.add('signature-image'); // Adiciona a
+                signatureImage.classList.add('signature-image'); // Adiciona a classe para estilização
+                const colaboradorSignatureLine = document.getElementById('colaborador-signature-line');
+                colaboradorSignatureLine.innerHTML = '';
+                colaboradorSignatureLine.appendChild(signatureImage);
+                colaboradorModal.style.display = 'none';
+            }
+        });
+
+        // Função para converter a página em PDF e fazer o download
+        document.getElementById('save-button').addEventListener('click', () => {
+            const element = document.body; // Seleciona o corpo da página
+            const options = {
+                margin: [10, 10], // Margens do PDF
+                filename: 'feedback.pdf', // Nome do arquivo
+                image: { type: 'jpeg', quality: 0.98 }, // Qualidade da imagem
+                html2canvas: { scale: 2 }, // Escala para melhor qualidade
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // Formato A4
+            };
+
+            // Gera o PDF e faz o download
+            html2pdf().from(element).set(options).save();
+        });
+    </script>
+</body>
+</html>
