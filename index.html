@@ -36,7 +36,7 @@
             color: #980000;
         }
 
-        /* Estilo para o modal (pop-up) */
+        /* Estilo para os modais (pop-ups) */
         .modal {
             display: none; /* Escondido por padrão */
             position: fixed;
@@ -97,53 +97,81 @@
         <p>
             <strong>Assinatura da Supervisão:</strong>
             <a href="#" id="open-signature-modal-supervisor">✏️</a>
-            <div class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
+            <div id="supervisor-signature-line" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
             <strong>Data:__/__/____</strong>
         </p>
         <p>
             <strong>Assinatura do Colaborador(a):</strong>
             <a href="#" id="open-signature-modal-colaborador">✏️</a>
-            <div class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
+            <div id="colaborador-signature-line" class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
         </p>
     </div>
 
-    <!-- Modal (pop-up) para captura de assinatura -->
-    <div id="signature-modal" class="modal">
+    <!-- Modal para assinatura do supervisor -->
+    <div id="supervisor-signature-modal" class="modal">
         <div class="modal-content">
-            <h2>Captura de Assinatura</h2>
-            <canvas id="signature-pad" width="400" height="200"></canvas>
+            <h2>Assinatura do Supervisor</h2>
+            <canvas id="supervisor-signature-pad" width="400" height="200"></canvas>
             <br>
-            <button id="clear-signature">Limpar</button>
-            <button id="save-signature">Salvar</button>
-            <button id="close-signature-modal">Fechar</button>
+            <button id="clear-supervisor-signature">Limpar</button>
+            <button id="save-supervisor-signature">Salvar</button>
+            <button id="close-supervisor-signature-modal">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal para assinatura do colaborador -->
+    <div id="colaborador-signature-modal" class="modal">
+        <div class="modal-content">
+            <h2>Assinatura do Colaborador(a)</h2>
+            <canvas id="colaborador-signature-pad" width="400" height="200"></canvas>
+            <br>
+            <button id="clear-colaborador-signature">Limpar</button>
+            <button id="save-colaborador-signature">Salvar</button>
+            <button id="close-colaborador-signature-modal">Fechar</button>
         </div>
     </div>
 
     <script>
-        // Funções para abrir/fechar o modal
-        const modal = document.getElementById('signature-modal');
-        const openModalSupervisor = document.getElementById('open-signature-modal-supervisor');
-        const openModalColaborador = document.getElementById('open-signature-modal-colaborador');
-        const closeModal = document.getElementById('close-signature-modal');
+        // Funções para abrir/fechar os modais
+        const supervisorModal = document.getElementById('supervisor-signature-modal');
+        const colaboradorModal = document.getElementById('colaborador-signature-modal');
 
-        openModalSupervisor.addEventListener('click', () => {
-            modal.style.display = 'flex'; // Abre o modal
+        const openSupervisorModal = document.getElementById('open-signature-modal-supervisor');
+        const openColaboradorModal = document.getElementById('open-signature-modal-colaborador');
+
+        const closeSupervisorModal = document.getElementById('close-supervisor-signature-modal');
+        const closeColaboradorModal = document.getElementById('close-colaborador-signature-modal');
+
+        // Abrir modal do supervisor
+        openSupervisorModal.addEventListener('click', () => {
+            supervisorModal.style.display = 'flex';
         });
 
-        openModalColaborador.addEventListener('click', () => {
-            modal.style.display = 'flex'; // Abre o modal
+        // Abrir modal do colaborador
+        openColaboradorModal.addEventListener('click', () => {
+            colaboradorModal.style.display = 'flex';
         });
 
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none'; // Fecha o modal
+        // Fechar modal do supervisor
+        closeSupervisorModal.addEventListener('click', () => {
+            supervisorModal.style.display = 'none';
         });
 
-        // Inicializar o Signature Pad
-        const canvas = document.getElementById('signature-pad');
-        const signaturePad = new SignaturePad(canvas);
+        // Fechar modal do colaborador
+        closeColaboradorModal.addEventListener('click', () => {
+            colaboradorModal.style.display = 'none';
+        });
+
+        // Inicializar o Signature Pad para o supervisor
+        const supervisorCanvas = document.getElementById('supervisor-signature-pad');
+        const supervisorSignaturePad = new SignaturePad(supervisorCanvas);
+
+        // Inicializar o Signature Pad para o colaborador
+        const colaboradorCanvas = document.getElementById('colaborador-signature-pad');
+        const colaboradorSignaturePad = new SignaturePad(colaboradorCanvas);
 
         // Função para desenhar a linha guia no canvas
-        function drawGuideLine() {
+        function drawGuideLine(canvas) {
             const ctx = canvas.getContext('2d');
             ctx.beginPath();
             ctx.strokeStyle = '#ccc'; // Cor da linha guia
@@ -153,23 +181,30 @@
             ctx.stroke();
         }
 
-        // Chamar a função ao inicializar o canvas
-        drawGuideLine();
+        // Desenhar a linha guia nos dois canvases
+        drawGuideLine(supervisorCanvas);
+        drawGuideLine(colaboradorCanvas);
 
-        // Botão para limpar a assinatura
-        document.getElementById('clear-signature').addEventListener('click', () => {
-            signaturePad.clear();
-            drawGuideLine(); // Redesenha a linha guia após limpar
+        // Botão para limpar a assinatura do supervisor
+        document.getElementById('clear-supervisor-signature').addEventListener('click', () => {
+            supervisorSignaturePad.clear();
+            drawGuideLine(supervisorCanvas); // Redesenha a linha guia
         });
 
-        // Botão para salvar a assinatura
-        document.getElementById('save-signature').addEventListener('click', () => {
-            if (signaturePad.isEmpty()) {
+        // Botão para limpar a assinatura do colaborador
+        document.getElementById('clear-colaborador-signature').addEventListener('click', () => {
+            colaboradorSignaturePad.clear();
+            drawGuideLine(colaboradorCanvas); // Redesenha a linha guia
+        });
+
+        // Botão para salvar a assinatura do supervisor
+        document.getElementById('save-supervisor-signature').addEventListener('click', () => {
+            if (supervisorSignaturePad.isEmpty()) {
                 alert('Por favor, forneça uma assinatura.');
             } else {
-                const dataURL = signaturePad.toDataURL(); // Salva a assinatura como imagem
+                const dataURL = supervisorSignaturePad.toDataURL(); // Salva a assinatura como imagem
 
-                // Exibir a assinatura salva sobre a linha de assinatura
+                // Exibir a assinatura salva sobre a linha de assinatura do supervisor
                 const signatureImage = document.createElement('img');
                 signatureImage.src = dataURL;
                 signatureImage.style.width = '150px'; // Ajuste o tamanho conforme necessário
@@ -178,11 +213,35 @@
                 signatureImage.style.left = '0';
 
                 // Substituir o ícone de lápis pela imagem da assinatura
-                const signatureLine = document.querySelector('.signature-line');
-                signatureLine.innerHTML = ''; // Limpa o conteúdo anterior
-                signatureLine.appendChild(signatureImage);
+                const supervisorSignatureLine = document.getElementById('supervisor-signature-line');
+                supervisorSignatureLine.innerHTML = ''; // Limpa o conteúdo anterior
+                supervisorSignatureLine.appendChild(signatureImage);
 
-                modal.style.display = 'none'; // Fecha o modal após salvar
+                supervisorModal.style.display = 'none'; // Fecha o modal após salvar
+            }
+        });
+
+        // Botão para salvar a assinatura do colaborador
+        document.getElementById('save-colaborador-signature').addEventListener('click', () => {
+            if (colaboradorSignaturePad.isEmpty()) {
+                alert('Por favor, forneça uma assinatura.');
+            } else {
+                const dataURL = colaboradorSignaturePad.toDataURL(); // Salva a assinatura como imagem
+
+                // Exibir a assinatura salva sobre a linha de assinatura do colaborador
+                const signatureImage = document.createElement('img');
+                signatureImage.src = dataURL;
+                signatureImage.style.width = '150px'; // Ajuste o tamanho conforme necessário
+                signatureImage.style.position = 'absolute';
+                signatureImage.style.top = '0';
+                signatureImage.style.left = '0';
+
+                // Substituir o ícone de lápis pela imagem da assinatura
+                const colaboradorSignatureLine = document.getElementById('colaborador-signature-line');
+                colaboradorSignatureLine.innerHTML = ''; // Limpa o conteúdo anterior
+                colaboradorSignatureLine.appendChild(signatureImage);
+
+                colaboradorModal.style.display = 'none'; // Fecha o modal após salvar
             }
         });
     </script>
