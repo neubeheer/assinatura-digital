@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style type="text/css">
         /* Estilos para a folha A4 */
         @page {
@@ -9,8 +10,8 @@
             margin: 0;
         }
         body {
-            width: 210mm; /* Largura de uma folha A4 */
-            height: 297mm; /* Altura de uma folha A4 */
+            width: 100%;
+            max-width: 210mm; /* Largura máxima de uma folha A4 */
             margin: 0 auto;
             padding: 20px;
             font-family: Arial, sans-serif;
@@ -58,27 +59,30 @@
             border-radius: 8px;
             text-align: center;
             position: relative; /* Permite posicionar a linha guia */
+            width: 90%; /* Largura do modal em dispositivos móveis */
+            max-width: 400px; /* Largura máxima do modal */
         }
         canvas {
             border: 1px solid #000;
             margin-top: 20px;
+            width: 100%; /* Canvas responsivo */
+            height: auto; /* Altura automática */
         }
-      .signature-button {
-    background-color: white; /* Cor de fundo branca */
-    border: 0px solid #000; /* Contorno preto */
-    color: #000; /* Cor do texto preto */
-    padding: 5px 10px; /* Ajuste o padding conforme necessário */
-    cursor: pointer; /* Mantém o cursor como pointer */
-          margin-top: 10px;
-             padding: 10px 20px;
-             font-size: 16px;
+        .signature-button {
+            background-color: white; /* Cor de fundo branca */
+            border: 0px solid #000; /* Contorno preto */
+            color: #000; /* Cor do texto preto */
+            padding: 5px 10px; /* Ajuste o padding conforme necessário */
+            cursor: pointer; /* Mantém o cursor como pointer */
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
 
-}
-
-/* Estilo para o ícone do lápis dentro do botão */
-.signature-button .pencil-icon {
-    color: #000; /* Cor do ícone preto */
-}
+        /* Estilo para o ícone do lápis dentro do botão */
+        .signature-button .pencil-icon {
+            color: #000; /* Cor do ícone preto */
+        }
 
         /* Estilo para o container das assinaturas e data */
         .signature-container {
@@ -86,6 +90,7 @@
             justify-content: space-between; /* Espaço entre os itens */
             align-items: flex-end; /* Alinha os itens na parte inferior */
             margin-top: 20px; /* Espaçamento acima do container */
+            flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
         }
 
         /* Estilo para cada bloco de assinatura */
@@ -93,6 +98,7 @@
             display: flex;
             flex-direction: column; /* Alinha os itens verticalmente */
             align-items: flex-start; /* Alinha os itens à esquerda */
+            margin-bottom: 10px; /* Espaçamento entre os blocos */
         }
 
         /* Estilo para a linha de assinatura */
@@ -135,6 +141,26 @@
             height: 1px;
             background-color: #ccc; /* Cor da linha guia */
             z-index: 1; /* Garante que a linha fique acima do canvas */
+        }
+
+        /* Responsividade para dispositivos móveis */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .modal-content {
+                width: 80%; /* Ocupa 80% da tela em dispositivos móveis */
+            }
+            .signature-container {
+                flex-direction: column; /* Alinha os itens verticalmente */
+                align-items: center; /* Centraliza os itens */
+            }
+            .signature-block {
+                align-items: center; /* Centraliza os itens */
+            }
+            .date-container {
+                margin: 10px 0; /* Ajusta o espaçamento */
+            }
         }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
