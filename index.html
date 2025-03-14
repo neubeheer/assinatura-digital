@@ -93,30 +93,20 @@
             position: relative; /* Permite posicionar a assinatura sobre a linha */
         }
 
-        /* Estilo para a imagem da assinatura */
-        .signature-image {
-            position: absolute;
-            bottom: 0; /* Alinha a assinatura com a linha */
-            left: 0;
-            width: 100%; /* Ajusta a largura da assinatura */
-            height: auto; /* Mantém a proporção da imagem */
-        }
-
-        /* Estilo para o botão de assinatura */
-        .signature-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            display: inline-flex;
-            align-items: flex-end;
-        }
-
         /* Estilo para o ícone do lápis */
         .pencil-icon {
             font-size: 20px;
             line-height: 1;
             margin-right: 5px;
+        }
+
+        /* Estilo para a imagem da assinatura */
+        .signature-image {
+            position: absolute;
+            bottom: 0; /* Alinha a assinatura com a linha */
+            left: 25px; /* Ajusta a posição para não sobrepor o ícone do lápis */
+            width: 120px; /* Largura da assinatura */
+            height: auto; /* Mantém a proporção da imagem */
         }
 
         /* Estilo para a data */
