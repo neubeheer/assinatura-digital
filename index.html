@@ -68,11 +68,23 @@
             font-size: 16px;
             cursor: pointer;
         }
+
+        /* Estilo para a data */
+        .date-container {
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 12pt;
+        }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
+    <!-- Container para a data -->
+    <div class="date-container">
+        Data: <span id="current-date"></span>
+    </div>
+
     <div>
         <h1 style="text-align: center;">FEEDBACK - OMINI/TALK</h1>
         <table>
@@ -138,6 +150,21 @@
     </div>
 
     <script>
+        // Função para formatar a data no formato DD/MM/AAAA
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0'); // Dia com 2 dígitos
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês com 2 dígitos
+            const year = date.getFullYear(); // Ano com 4 dígitos
+            return `${day}/${month}/${year}`; // Retorna a data formatada
+        }
+
+        // Função para exibir a data atual
+        function displayCurrentDate() {
+            const currentDate = new Date(); // Pega a data atual
+            const formattedDate = formatDate(currentDate); // Formata a data
+            document.getElementById('current-date').textContent = formattedDate; // Exibe a data
+        }
+
         // Função para carregar os dados da planilha
         async function loadSheetData() {
             const spreadsheetId = '1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ'; // ID da planilha
@@ -172,10 +199,13 @@
             }
         }
 
-        // Carrega os dados ao carregar a página
-        window.onload = loadSheetData;
+        // Carrega os dados e exibe a data ao carregar a página
+        window.onload = function () {
+            displayCurrentDate(); // Exibe a data atual
+            loadSheetData(); // Carrega os dados da planilha
+        };
 
-        // Funções para abrir/fechar os modais
+        // Restante do código JavaScript (modais, assinaturas, etc.)
         const supervisorModal = document.getElementById('supervisor-signature-modal');
         const colaboradorModal = document.getElementById('colaborador-signature-modal');
 
@@ -185,106 +215,84 @@
         const closeSupervisorModal = document.getElementById('close-supervisor-signature-modal');
         const closeColaboradorModal = document.getElementById('close-colaborador-signature-modal');
 
-        // Abrir modal do supervisor
         openSupervisorModal.addEventListener('click', () => {
             supervisorModal.style.display = 'flex';
         });
 
-        // Abrir modal do colaborador
         openColaboradorModal.addEventListener('click', () => {
             colaboradorModal.style.display = 'flex';
         });
 
-        // Fechar modal do supervisor
         closeSupervisorModal.addEventListener('click', () => {
             supervisorModal.style.display = 'none';
         });
 
-        // Fechar modal do colaborador
         closeColaboradorModal.addEventListener('click', () => {
             colaboradorModal.style.display = 'none';
         });
 
-        // Inicializar o Signature Pad para o supervisor
         const supervisorCanvas = document.getElementById('supervisor-signature-pad');
         const supervisorSignaturePad = new SignaturePad(supervisorCanvas);
 
-        // Inicializar o Signature Pad para o colaborador
         const colaboradorCanvas = document.getElementById('colaborador-signature-pad');
         const colaboradorSignaturePad = new SignaturePad(colaboradorCanvas);
 
-        // Função para desenhar a linha guia no canvas
         function drawGuideLine(canvas) {
             const ctx = canvas.getContext('2d');
             ctx.beginPath();
-            ctx.strokeStyle = '#ccc'; // Cor da linha guia
-            ctx.lineWidth = 1; // Espessura da linha
-            ctx.moveTo(0, canvas.height / 2); // Início da linha (meio do canvas)
-            ctx.lineTo(canvas.width, canvas.height / 2); // Fim da linha (meio do canvas)
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
             ctx.stroke();
         }
 
-        // Desenhar a linha guia nos dois canvases
         drawGuideLine(supervisorCanvas);
         drawGuideLine(colaboradorCanvas);
 
-        // Botão para limpar a assinatura do supervisor
         document.getElementById('clear-supervisor-signature').addEventListener('click', () => {
             supervisorSignaturePad.clear();
-            drawGuideLine(supervisorCanvas); // Redesenha a linha guia
+            drawGuideLine(supervisorCanvas);
         });
 
-        // Botão para limpar a assinatura do colaborador
         document.getElementById('clear-colaborador-signature').addEventListener('click', () => {
             colaboradorSignaturePad.clear();
-            drawGuideLine(colaboradorCanvas); // Redesenha a linha guia
+            drawGuideLine(colaboradorCanvas);
         });
 
-        // Botão para salvar a assinatura do supervisor
         document.getElementById('save-supervisor-signature').addEventListener('click', () => {
             if (supervisorSignaturePad.isEmpty()) {
                 alert('Por favor, forneça uma assinatura.');
             } else {
-                const dataURL = supervisorSignaturePad.toDataURL(); // Salva a assinatura como imagem
-
-                // Exibir a assinatura salva sobre a linha de assinatura do supervisor
+                const dataURL = supervisorSignaturePad.toDataURL();
                 const signatureImage = document.createElement('img');
                 signatureImage.src = dataURL;
-                signatureImage.style.width = '150px'; // Ajuste o tamanho conforme necessário
+                signatureImage.style.width = '150px';
                 signatureImage.style.position = 'absolute';
                 signatureImage.style.top = '0';
                 signatureImage.style.left = '0';
-
-                // Substituir o ícone de lápis pela imagem da assinatura
                 const supervisorSignatureLine = document.getElementById('supervisor-signature-line');
-                supervisorSignatureLine.innerHTML = ''; // Limpa o conteúdo anterior
+                supervisorSignatureLine.innerHTML = '';
                 supervisorSignatureLine.appendChild(signatureImage);
-
-                supervisorModal.style.display = 'none'; // Fecha o modal após salvar
+                supervisorModal.style.display = 'none';
             }
         });
 
-        // Botão para salvar a assinatura do colaborador
         document.getElementById('save-colaborador-signature').addEventListener('click', () => {
             if (colaboradorSignaturePad.isEmpty()) {
                 alert('Por favor, forneça uma assinatura.');
             } else {
-                const dataURL = colaboradorSignaturePad.toDataURL(); // Salva a assinatura como imagem
-
-                // Exibir a assinatura salva sobre a linha de assinatura do colaborador
+                const dataURL = colaboradorSignaturePad.toDataURL();
                 const signatureImage = document.createElement('img');
                 signatureImage.src = dataURL;
-                signatureImage.style.width = '150px'; // Ajuste o tamanho conforme necessário
+                signatureImage.style.width = '150px';
                 signatureImage.style.position = 'absolute';
                 signatureImage.style.top = '0';
                 signatureImage.style.left = '0';
-
-                // Substituir o ícone de lápis pela imagem da assinatura
                 const colaboradorSignatureLine = document.getElementById('colaborador-signature-line');
-                colaboradorSignatureLine.innerHTML = ''; // Limpa o conteúdo anterior
+                colaboradorSignatureLine.innerHTML = '';
                 colaboradorSignatureLine.appendChild(signatureImage);
-
-                colaboradorModal.style.display = 'none'; // Fecha o modal após salvar
+                colaboradorModal.style.display = 'none';
             }
         });
     </script>
