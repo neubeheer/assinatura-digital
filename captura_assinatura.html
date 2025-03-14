@@ -18,6 +18,19 @@
             font-size: 16px;
             cursor: pointer;
         }
+        .back-button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #000;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: #ddd;
+        }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
@@ -28,6 +41,9 @@
     <br>
     <button id="clear-signature">Limpar</button>
     <button id="save-signature">Salvar</button>
+
+    <!-- Botão para voltar à página principal -->
+    <a href="index.html" class="back-button">Voltar</a>
 
     <script>
         // Inicializar o Signature Pad
@@ -47,7 +63,7 @@
                 const dataURL = signaturePad.toDataURL(); // Salva a assinatura como imagem
                 alert('Assinatura salva!');
                 // Aqui você pode enviar a imagem para o servidor ou exibi-la na página principal
-                window.opener.postMessage(dataURL, '*'); // Envia a assinatura de volta para a página principal
+                window.opener.postMessage(dataURL, 'https://neubeheer.github.io/assinatura-digital/feedback.html'); // Envia a assinatura de volta para a página principal
                 window.close(); // Fecha a janela de captura de assinatura
             }
         });
