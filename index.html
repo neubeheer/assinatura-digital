@@ -36,11 +36,37 @@
             color: #980000;
         }
 
-        /* Estilo para aumentar o tamanho da fonte dos textos em negrito */
-        .signature-container strong {
-            font-size: 14px; /* Altere o valor conforme necessário */
+        /* Estilo para o modal (pop-up) */
+        .modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #000;
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
+    <!-- Incluir a biblioteca Signature Pad -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
     <div>
@@ -70,53 +96,67 @@
     <div class="signature-container">
         <p>
             <strong>Assinatura da Supervisão:</strong>
-            <a href="captura_assinatura.html" target="_blank">✏️</a> ________________________
+            <a href="#" id="open-signature-modal-supervisor">✏️</a> ________________________
             <strong>Data:__/__/____</strong>
         </p>
         <p>
             <strong>Assinatura do Colaborador(a):</strong>
-            <a href="captura_assinatura.html" target="_blank">✏️</a> __________________________
+            <a href="#" id="open-signature-modal-colaborador">✏️</a> __________________________
         </p>
     </div>
 
-    <!-- Repetir para outras semanas -->
-    <div>
-        <h2>PRIMEIRA SEMANA DE:</h2>
-        <table>
-            <tr>
-                <th>TME</th>
-                <th>TMA</th>
-                <th>TMIA</th>
-                <th>TAXA DE TF.</th>
-                <th>AB/PROD</th>
-                <th>PENDÊNCIAS</th>
-                <th>O.S/LOG</th>
-                <th>PERÍODO</th>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-        <div class="signature-container">
-            <p>
-                <strong>Assinatura da Supervisão:</strong>
-                <a href="captura_assinatura.html" target="_blank">✏️</a> ________________________
-                <strong>Data:__/__/____</strong>
-            </p>
-            <p>
-                <strong>Assinatura do Colaborador(a):</strong>
-                <a href="captura_assinatura.html" target="_blank">✏️</a> __________________________
-            </p>
+    <!-- Modal (pop-up) para captura de assinatura -->
+    <div id="signature-modal" class="modal">
+        <div class="modal-content">
+            <h2>Captura de Assinatura</h2>
+            <canvas id="signature-pad" width="400" height="200"></canvas>
+            <br>
+            <button id="clear-signature">Limpar</button>
+            <button id="save-signature">Salvar</button>
+            <button id="close-signature-modal">Fechar</button>
         </div>
     </div>
 
-    <!-- Adicionar mais seções para SEGUNDA, TERCEIRA e QUARTA SEMANAS conforme necessário -->
+    <script>
+        // Funções para abrir/fechar o modal
+        const modal = document.getElementById('signature-modal');
+        const openModalSupervisor = document.getElementById('open-signature-modal-supervisor');
+        const openModalColaborador = document.getElementById('open-signature-modal-colaborador');
+        const closeModal = document.getElementById('close-signature-modal');
+
+        openModalSupervisor.addEventListener('click', () => {
+            modal.style.display = 'flex'; // Abre o modal
+        });
+
+        openModalColaborador.addEventListener('click', () => {
+            modal.style.display = 'flex'; // Abre o modal
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none'; // Fecha o modal
+        });
+
+        // Inicializar o Signature Pad
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+
+        // Botão para limpar a assinatura
+        document.getElementById('clear-signature').addEventListener('click', () => {
+            signaturePad.clear();
+        });
+
+        // Botão para salvar a assinatura
+        document.getElementById('save-signature').addEventListener('click', () => {
+            if (signaturePad.isEmpty()) {
+                alert('Por favor, forneça uma assinatura.');
+            } else {
+                const dataURL = signaturePad.toDataURL(); // Salva a assinatura como imagem
+                alert('Assinatura salva!');
+                // Aqui você pode enviar a imagem para o servidor ou exibi-la na página principal
+                console.log(dataURL); // Exemplo: exibir no console
+                modal.style.display = 'none'; // Fecha o modal após salvar
+            }
+        });
+    </script>
 </body>
 </html>
