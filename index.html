@@ -96,12 +96,14 @@
     <div class="signature-container">
         <p>
             <strong>Assinatura da Supervisão:</strong>
-            <a href="#" id="open-signature-modal-supervisor">✏️</a> ________________________
+            <a href="#" id="open-signature-modal-supervisor">✏️</a>
+            <div class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
             <strong>Data:__/__/____</strong>
         </p>
         <p>
             <strong>Assinatura do Colaborador(a):</strong>
-            <a href="#" id="open-signature-modal-colaborador">✏️</a> __________________________
+            <a href="#" id="open-signature-modal-colaborador">✏️</a>
+            <div class="signature-line" style="display: inline-block; position: relative; width: 150px; height: 50px; border-bottom: 1px solid #000;"></div>
         </p>
     </div>
 
@@ -140,9 +142,24 @@
         const canvas = document.getElementById('signature-pad');
         const signaturePad = new SignaturePad(canvas);
 
+        // Função para desenhar a linha guia no canvas
+        function drawGuideLine() {
+            const ctx = canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.strokeStyle = '#ccc'; // Cor da linha guia
+            ctx.lineWidth = 1; // Espessura da linha
+            ctx.moveTo(0, canvas.height / 2); // Início da linha (meio do canvas)
+            ctx.lineTo(canvas.width, canvas.height / 2); // Fim da linha (meio do canvas)
+            ctx.stroke();
+        }
+
+        // Chamar a função ao inicializar o canvas
+        drawGuideLine();
+
         // Botão para limpar a assinatura
         document.getElementById('clear-signature').addEventListener('click', () => {
             signaturePad.clear();
+            drawGuideLine(); // Redesenha a linha guia após limpar
         });
 
         // Botão para salvar a assinatura
@@ -151,9 +168,20 @@
                 alert('Por favor, forneça uma assinatura.');
             } else {
                 const dataURL = signaturePad.toDataURL(); // Salva a assinatura como imagem
-                alert('Assinatura salva!');
-                // Aqui você pode enviar a imagem para o servidor ou exibi-la na página principal
-                console.log(dataURL); // Exemplo: exibir no console
+
+                // Exibir a assinatura salva sobre a linha de assinatura
+                const signatureImage = document.createElement('img');
+                signatureImage.src = dataURL;
+                signatureImage.style.width = '150px'; // Ajuste o tamanho conforme necessário
+                signatureImage.style.position = 'absolute';
+                signatureImage.style.top = '0';
+                signatureImage.style.left = '0';
+
+                // Substituir o ícone de lápis pela imagem da assinatura
+                const signatureLine = document.querySelector('.signature-line');
+                signatureLine.innerHTML = ''; // Limpa o conteúdo anterior
+                signatureLine.appendChild(signatureImage);
+
                 modal.style.display = 'none'; // Fecha o modal após salvar
             }
         });
