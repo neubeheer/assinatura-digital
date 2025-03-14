@@ -90,6 +90,16 @@
             width: 150px;
             border-bottom: 1px solid #000;
             margin-top: 5px; /* Espaço entre o texto e a linha */
+            position: relative; /* Permite posicionar a assinatura sobre a linha */
+        }
+
+        /* Estilo para a imagem da assinatura */
+        .signature-image {
+            position: absolute;
+            bottom: 0; /* Alinha a assinatura com a linha */
+            left: 0;
+            width: 100%; /* Ajusta a largura da assinatura */
+            height: auto; /* Mantém a proporção da imagem */
         }
 
         /* Estilo para o botão de assinatura */
@@ -310,10 +320,7 @@
                 const dataURL = supervisorSignaturePad.toDataURL();
                 const signatureImage = document.createElement('img');
                 signatureImage.src = dataURL;
-                signatureImage.style.width = '150px';
-                signatureImage.style.position = 'absolute';
-                signatureImage.style.top = '0';
-                signatureImage.style.left = '0';
+                signatureImage.classList.add('signature-image'); // Adiciona a classe para estilização
                 const supervisorSignatureLine = document.getElementById('supervisor-signature-line');
                 supervisorSignatureLine.innerHTML = '';
                 supervisorSignatureLine.appendChild(signatureImage);
@@ -328,10 +335,7 @@
                 const dataURL = colaboradorSignaturePad.toDataURL();
                 const signatureImage = document.createElement('img');
                 signatureImage.src = dataURL;
-                signatureImage.style.width = '150px';
-                signatureImage.style.position = 'absolute';
-                signatureImage.style.top = '0';
-                signatureImage.style.left = '0';
+                signatureImage.classList.add('signature-image'); // Adiciona a classe para estilização
                 const colaboradorSignatureLine = document.getElementById('colaborador-signature-line');
                 colaboradorSignatureLine.innerHTML = '';
                 colaboradorSignatureLine.appendChild(signatureImage);
