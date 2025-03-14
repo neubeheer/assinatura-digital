@@ -4,13 +4,167 @@
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style type="text/css">
-        /* Estilos anteriores (mantidos) */
-        /* ... */
+        /* Estilos para a folha A4 */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        body {
+            width: 100%;
+            max-width: 210mm; /* Largura máxima de uma folha A4 */
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* Estilos para a tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10pt; /* Tamanho da fonte da tabela */
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+
+        /* Estilos para as letras */
+        .text-large {
+            font-size: 14pt; /* Tamanho da fonte maior */
+        }
+        .text-medium {
+            font-size: 12pt; /* Tamanho da fonte médio */
+        }
+        .text-small {
+            font-size: 10pt; /* Tamanho da fonte pequeno */
+        }
+
+        /* Estilos para os modais (pop-ups) */
+        .modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative; /* Permite posicionar a linha guia */
+            width: 90%; /* Largura do modal em dispositivos móveis */
+            max-width: 400px; /* Largura máxima do modal */
+        }
+        canvas {
+            border: 1px solid #000;
+            margin-top: 20px;
+            width: 100%; /* Canvas responsivo */
+            height: auto; /* Altura automática */
+        }
+        .signature-button {
+            background-color: white; /* Cor de fundo branca */
+            border: 0px solid #000; /* Contorno preto */
+            color: #000; /* Cor do texto preto */
+            padding: 5px 10px; /* Ajuste o padding conforme necessário */
+            cursor: pointer; /* Mantém o cursor como pointer */
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        /* Estilo para o ícone do lápis dentro do botão */
+        .signature-button .pencil-icon {
+            color: #000; /* Cor do ícone preto */
+        }
+
+        /* Estilo para o container das assinaturas e data */
+        .signature-container {
+            display: flex; /* Usa Flexbox para alinhar os itens */
+            justify-content: space-between; /* Espaço entre os itens */
+            align-items: flex-end; /* Alinha os itens na parte inferior */
+            margin-top: 20px; /* Espaçamento acima do container */
+            flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+        }
+
+        /* Estilo para cada bloco de assinatura */
+        .signature-block {
+            display: flex;
+            flex-direction: column; /* Alinha os itens verticalmente */
+            align-items: flex-start; /* Alinha os itens à esquerda */
+            margin-bottom: 10px; /* Espaçamento entre os blocos */
+        }
+
+        /* Estilo para a linha de assinatura */
+        .signature-line {
+            display: inline-block;
+            width: 150px;
+            border-bottom: 1px solid #000;
+            margin-top: 5px; /* Espaço entre o texto e a linha */
+            position: relative; /* Permite posicionar a assinatura sobre a linha */
+        }
+
+        /* Estilo para o ícone do lápis */
+        .pencil-icon {
+            font-size: 20px;
+            line-height: 1;
+            margin-right: 5px;
+        }
+
+        /* Estilo para a imagem da assinatura */
+        .signature-image {
+            position: absolute;
+            bottom: -10px; /* Ajusta a posição vertical da assinatura */
+            left: 25px; /* Ajusta a posição horizontal da assinatura */
+            width: 120px; /* Largura da assinatura */
+            height: auto; /* Mantém a proporção da imagem */
+        }
+
+        /* Estilo para a data */
+        .date-container {
+            font-size: 12pt;
+            margin: 0 20px; /* Espaço entre a data e as assinaturas */
+        }
+
+        /* Estilo para a linha guia no modal */
+        .guide-line {
+            position: absolute;
+            top: 50%; /* Posiciona a linha no meio do modal */
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #ccc; /* Cor da linha guia */
+            z-index: 1; /* Garante que a linha fique acima do canvas */
+        }
+
+        /* Responsividade para dispositivos móveis */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .modal-content {
+                width: 80%; /* Ocupa 80% da tela em dispositivos móveis */
+            }
+            .signature-container {
+                flex-direction: column; /* Alinha os itens verticalmente */
+                align-items: center; /* Centraliza os itens */
+            }
+            .signature-block {
+                align-items: center; /* Centraliza os itens */
+            }
+            .date-container {
+                margin: 10px 0; /* Ajusta o espaçamento */
+            }
+        }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-    <!-- Incluir a biblioteca html2pdf.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div>
@@ -62,17 +216,11 @@
         </div>
     </div>
 
-    <!-- Botão SALVAR TUDO -->
-    <button id="save-all-button" class="save-all-button">
-        <span class="floppy-icon">💾</span>
-        SALVAR TUDO
-    </button>
-
-    <!-- Modais (mantidos) -->
+    <!-- Modal para assinatura do supervisor -->
     <div id="supervisor-signature-modal" class="modal">
         <div class="modal-content">
             <h2>Assinatura do Supervisor</h2>
-            <div class="guide-line"></div>
+            <div class="guide-line"></div> <!-- Linha guia -->
             <canvas id="supervisor-signature-pad" width="400" height="200"></canvas>
             <br>
             <button id="clear-supervisor-signature">Limpar</button>
@@ -81,10 +229,11 @@
         </div>
     </div>
 
+    <!-- Modal para assinatura do colaborador -->
     <div id="colaborador-signature-modal" class="modal">
         <div class="modal-content">
             <h2>Assinatura do Colaborador(a)</h2>
-            <div class="guide-line"></div>
+            <div class="guide-line"></div> <!-- Linha guia -->
             <canvas id="colaborador-signature-pad" width="400" height="200"></canvas>
             <br>
             <button id="clear-colaborador-signature">Limpar</button>
@@ -94,46 +243,146 @@
     </div>
 
     <script>
-        // Função para exportar a página para PDF
-        async function exportToPDF() {
-            const element = document.body;
-            const options = {
-                margin: 10,
-                filename: 'feedback.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+        // Função para formatar a data no formato DD/MM/AAAA
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0'); // Dia com 2 dígitos
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês com 2 dígitos
+            const year = date.getFullYear(); // Ano com 4 dígitos
+            return `${day}/${month}/${year}`; // Retorna a data formatada
+        }
 
-            // Gerar o PDF
-            const pdf = await html2pdf().set(options).from(element).output('blob');
+        // Função para exibir a data atual
+        function displayCurrentDate() {
+            const currentDate = new Date(); // Pega a data atual
+            const formattedDate = formatDate(currentDate); // Formata a data
+            document.getElementById('current-date').textContent = formattedDate; // Exibe a data
+        }
 
-            // Enviar o PDF para o backend
-            const formData = new FormData();
-            formData.append('file', pdf, 'feedback.pdf');
+        // Função para carregar os dados da planilha
+        async function loadSheetData() {
+            const spreadsheetId = '1mlWkSU2NgBKhs1IVi50A6ecSADbnjPeikKKGplCFaoQ'; // ID da planilha
+            const range = 'FORMATAÇÃO!A2:J2'; // Intervalo de células
+            const apiKey = 'AIzaSyDiCYaVwgq3gmuQWhZIICEJoN5iTwbo-AY'; // Sua chave de API
+
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
 
             try {
-                const response = await fetch('/upload-to-drive', {
-                    method: 'POST',
-                    body: formData,
-                });
-                const result = await response.json();
-                if (result.success) {
-                    alert('PDF salvo no Google Drive com sucesso!');
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.values) {
+                    const tableBody = document.querySelector('table tbody');
+                    tableBody.innerHTML = ''; // Limpa o conteúdo anterior da tabela
+
+                    // Preenche a tabela com os dados da planilha
+                    data.values.forEach((row, rowIndex) => {
+                        const tr = document.createElement('tr');
+                        row.forEach((cell, cellIndex) => {
+                            const td = document.createElement('td');
+                            td.textContent = cell;
+                            tr.appendChild(td);
+                        });
+                        tableBody.appendChild(tr);
+                    });
                 } else {
-                    alert('Erro ao salvar o PDF no Google Drive.');
+                    console.error('Nenhum dado encontrado na planilha.');
                 }
             } catch (error) {
-                console.error('Erro ao enviar o PDF:', error);
-                alert('Erro ao enviar o PDF.');
+                console.error('Erro ao carregar os dados da planilha:', error);
             }
         }
 
-        // Adicionar evento ao botão SALVAR TUDO
-        document.getElementById("save-all-button").addEventListener("click", exportToPDF);
+        // Carrega os dados e exibe a data ao carregar a página
+        window.onload = function () {
+            displayCurrentDate(); // Exibe a data atual
+            loadSheetData(); // Carrega os dados da planilha
+        };
 
-        // Restante do código JavaScript (mantido)
-        // ...
+        // Restante do código JavaScript (modais, assinaturas, etc.)
+        const supervisorModal = document.getElementById('supervisor-signature-modal');
+        const colaboradorModal = document.getElementById('colaborador-signature-modal');
+
+        const openSupervisorModal = document.getElementById('open-signature-modal-supervisor');
+        const openColaboradorModal = document.getElementById('open-signature-modal-colaborador');
+
+        const closeSupervisorModal = document.getElementById('close-supervisor-signature-modal');
+        const closeColaboradorModal = document.getElementById('close-colaborador-signature-modal');
+
+        openSupervisorModal.addEventListener('click', () => {
+            supervisorModal.style.display = 'flex';
+        });
+
+        openColaboradorModal.addEventListener('click', () => {
+            colaboradorModal.style.display = 'flex';
+        });
+
+        closeSupervisorModal.addEventListener('click', () => {
+            supervisorModal.style.display = 'none';
+        });
+
+        closeColaboradorModal.addEventListener('click', () => {
+            colaboradorModal.style.display = 'none';
+        });
+
+        const supervisorCanvas = document.getElementById('supervisor-signature-pad');
+        const supervisorSignaturePad = new SignaturePad(supervisorCanvas);
+
+        const colaboradorCanvas = document.getElementById('colaborador-signature-pad');
+        const colaboradorSignaturePad = new SignaturePad(colaboradorCanvas);
+
+        // Função para desenhar a linha guia no canvas
+        function drawGuideLine(canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+        }
+
+        drawGuideLine(supervisorCanvas);
+        drawGuideLine(colaboradorCanvas);
+
+        document.getElementById('clear-supervisor-signature').addEventListener('click', () => {
+            supervisorSignaturePad.clear();
+            drawGuideLine(supervisorCanvas);
+        });
+
+        document.getElementById('clear-colaborador-signature').addEventListener('click', () => {
+            colaboradorSignaturePad.clear();
+            drawGuideLine(colaboradorCanvas);
+        });
+
+        document.getElementById('save-supervisor-signature').addEventListener('click', () => {
+            if (supervisorSignaturePad.isEmpty()) {
+                alert('Por favor, forneça uma assinatura.');
+            } else {
+                const dataURL = supervisorSignaturePad.toDataURL();
+                const signatureImage = document.createElement('img');
+                signatureImage.src = dataURL;
+                signatureImage.classList.add('signature-image'); // Adiciona a classe para estilização
+                const supervisorSignatureLine = document.getElementById('supervisor-signature-line');
+                supervisorSignatureLine.innerHTML = '';
+                supervisorSignatureLine.appendChild(signatureImage);
+                supervisorModal.style.display = 'none';
+            }
+        });
+
+        document.getElementById('save-colaborador-signature').addEventListener('click', () => {
+            if (colaboradorSignaturePad.isEmpty()) {
+                alert('Por favor, forneça uma assinatura.');
+            } else {
+                const dataURL = colaboradorSignaturePad.toDataURL();
+                const signatureImage = document.createElement('img');
+                signatureImage.src = dataURL;
+                signatureImage.classList.add('signature-image'); // Adiciona a classe para estilização
+                const colaboradorSignatureLine = document.getElementById('colaborador-signature-line');
+                colaboradorSignatureLine.innerHTML = '';
+                colaboradorSignatureLine.appendChild(signatureImage);
+                colaboradorModal.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
