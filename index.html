@@ -5,12 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style type="text/css">
         /* Estilos anteriores (mantidos) */
-        /* ... */
+        @page { size: A4; margin: 0; }
+        body { width: 100%; max-width: 210mm; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+        th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+        .text-large { font-size: 14pt; }
+        .text-medium { font-size: 12pt; }
+        .text-small { font-size: 10pt; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; }
+        .modal-content { background-color: white; padding: 20px; border-radius: 8px; text-align: center; position: relative; width: 90%; max-width: 400px; }
+        canvas { border: 1px solid #000; margin-top: 20px; width: 100%; height: auto; }
+        .signature-button { background-color: white; border: 0px solid #000; color: #000; padding: 5px 10px; cursor: pointer; margin-top: 10px; padding: 10px 20px; font-size: 16px; }
+        .signature-button .pencil-icon { color: #000; }
+        .signature-container { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; flex-wrap: wrap; }
+        .signature-block { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 10px; }
+        .signature-line { display: inline-block; width: 150px; border-bottom: 1px solid #000; margin-top: 5px; position: relative; }
+        .pencil-icon { font-size: 20px; line-height: 1; margin-right: 5px; }
+        .signature-image { position: absolute; bottom: -10px; left: 25px; width: 120px; height: auto; }
+        .date-container { font-size: 12pt; margin: 0 20px; }
+        .guide-line { position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background-color: #ccc; z-index: 1; }
+        @media (max-width: 768px) { body { padding: 10px; } .modal-content { width: 80%; } .signature-container { flex-direction: column; align-items: center; } .signature-block { align-items: center; } .date-container { margin: 10px 0; } }
+
+        /* Novo estilo para o botão SALVAR TUDO */
+        .save-all-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .save-all-button .floppy-icon { font-size: 20px; }
     </style>
     <!-- Incluir a biblioteca Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <!-- Incluir a biblioteca html2pdf.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Incluir a biblioteca Google API Client -->
+    <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
     <div>
@@ -94,46 +130,71 @@
     </div>
 
     <script>
-        // Função para exportar a página para PDF
-        async function exportToPDF() {
+        // Configurações do Google Drive API
+        const CLIENT_ID = '294178735486-7b0frruftk7eb59omb96k1sph7vb1hhr.apps.googleusercontent.com'; // Substitua pelo seu Client ID
+        const API_KEY = 'AIzaSyDiCYaVwgq3gmuQWhZIICEJoN5iTwbo-AY'; // Substitua pela sua chave de API
+        const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+        const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+
+        // Função para autenticar o usuário
+        function handleAuthClick() {
+            gapi.auth2.getAuthInstance().signIn();
+        }
+
+        // Função para inicializar a API do Google
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES
+            }).then(() => {
+                console.log("API do Google inicializada.");
+            });
+        }
+
+        // Carregar a API do Google
+        function loadGoogleAPI() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        // Função para exportar a página para PDF e enviar para o Google Drive
+        async function exportToPDFAndUpload() {
             const element = document.body;
-            const options = {
-                margin: 10,
-                filename: 'feedback.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            const pdf = await html2pdf().from(element).output('blob'); // Gera o PDF como Blob
+
+            const fileMetadata = {
+                name: 'feedback.pdf', // Nome do arquivo
+                mimeType: 'application/pdf'
             };
 
-            // Gerar o PDF
-            const pdf = await html2pdf().set(options).from(element).output('blob');
-
-            // Enviar o PDF para o backend
             const formData = new FormData();
-            formData.append('file', pdf, 'feedback.pdf');
+            formData.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
+            formData.append('file', pdf);
 
-            try {
-                const response = await fetch('/upload-to-drive', {
-                    method: 'POST',
-                    body: formData,
-                });
-                const result = await response.json();
-                if (result.success) {
-                    alert('PDF salvo no Google Drive com sucesso!');
-                } else {
-                    alert('Erro ao salvar o PDF no Google Drive.');
-                }
-            } catch (error) {
-                console.error('Erro ao enviar o PDF:', error);
-                alert('Erro ao enviar o PDF.');
-            }
+            const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+
+            fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                method: 'POST',
+                headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  console.log('Arquivo enviado com sucesso:', data);
+                  alert('PDF salvo no Google Drive!');
+              }).catch(error => {
+                  console.error('Erro ao enviar arquivo:', error);
+              });
         }
 
         // Adicionar evento ao botão SALVAR TUDO
-        document.getElementById("save-all-button").addEventListener("click", exportToPDF);
+        document.getElementById("save-all-button").addEventListener("click", () => {
+            handleAuthClick(); // Autentica o usuário
+            setTimeout(exportToPDFAndUpload, 2000); // Aguarda a autenticação e envia o PDF
+        });
 
-        // Restante do código JavaScript (mantido)
-        // ...
+        // Carregar a API do Google ao iniciar a página
+        loadGoogleAPI();
     </script>
 </body>
 </html>
